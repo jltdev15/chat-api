@@ -9,5 +9,6 @@ const checkauth = require('../middleware/checkauth')
 router.post('/login', authController.login)
 router.post('/register', authController.registerAccount)
 router.get('/user',checkauth.verifyToken, authController.getCurrentUser)
+router.get('/allUser',checkauth.verifyToken, authController.getAlltUser)
 
 module.exports = router;

@@ -95,3 +95,24 @@ exports.getCurrentUser = async function (req, res) {
     }
 };
 
+exports.getAlltUser = async function (req, res) {    
+    try {
+
+        const user = await User.find().exec();
+
+        if (!user) {
+            return res.status(404).json({
+                content: "User not found",
+            });
+        }
+
+        res.status(200).json({
+            content: user,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            content: "An error occurred while retrieving the user",
+        });
+    }
+};
