@@ -32,7 +32,6 @@ exports.newMessage = async function (req, res) {
 
 exports.getMessage = async function (req, res) {
   try {
-
     const messages = await Message.find({
       $or: [
         { SenderConversationId: req.params.conversationId },
