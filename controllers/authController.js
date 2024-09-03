@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Conversation = require('../models/Conversation')
 const jwt = require("jsonwebtoken");
 exports.login = async function (req, res) {
     const { username, password } = req.body;
@@ -39,7 +40,7 @@ exports.login = async function (req, res) {
             content: accessToken
         });
 
-        console.log(accessToken);
+
     } catch (err) { }
 };
 exports.registerAccount = async function (req, res) {
@@ -53,6 +54,22 @@ exports.registerAccount = async function (req, res) {
             password: hashedPassword,
         });
         await newUser.save();
+
+
+        const getCurrentUser = await User.findOne({ username: newUser.username });
+
+        if (getCurrentUser.conversation.length < 1) {
+
+            const NewConversation = new Conversation({
+            });
+
+            await NewConversation.save();
+
+            getCurrentUser.conversation.push(NewConversation);
+
+            await getCurrentUser.save();
+        }
+
         res.status(200).json({
             content: hashedPassword,
             user: newUser,
@@ -63,7 +80,7 @@ exports.registerAccount = async function (req, res) {
 };
 
 
-exports.getCurrentUser = async function (req, res) {    
+exports.getCurrentUser = async function (req, res) {
     try {
 
         const token = req.cookies.jwt || req.header('Authorization').replace('Bearer ', '');
@@ -95,7 +112,7 @@ exports.getCurrentUser = async function (req, res) {
     }
 };
 
-exports.getAlltUser = async function (req, res) {    
+exports.getAlltUser = async function (req, res) {
     try {
 
         const user = await User.find().exec();

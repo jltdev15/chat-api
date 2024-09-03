@@ -2,9 +2,15 @@ const mongoose = require("mongoose");
 
 const ConversationSchema = new mongoose.Schema(
   {
-    members: {
-      type: Array,
-    },
+    conversations: [{
+      members: {
+        type: Array,
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    }]
   },
   { timestamps: true }
 );
